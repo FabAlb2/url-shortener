@@ -21,7 +21,10 @@ https://hub.docker.com/r/fabalb2/url-shortener
 ### image-Name
 fabalb2/url-shortener:0.1.0
 
-
+----------------------------
+Ich konnte im Studiuum leider keine Erfahrung mit Kubernetes/Helm sammeln, daher hoffe ich, dass es halbwegs vernünftig ist, was 
+ich dort fabriziert habe
+--------------------------
 
 ## Part 3: Helm und Kubernetes
 
@@ -39,6 +42,7 @@ kubectl port-forward svc/url-shortener 8080:80
 ## Part 4: CI/CD
 
 Pull Request: automatische Unit Tests
+Push auf main: Build & Push eines Docker-Images zu Docker Hub
 
 ### Workflow Datei
 .github/workflows/ci.yml
