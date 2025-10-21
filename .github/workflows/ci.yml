@@ -1,0 +1,51 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+# verhindert parallele veraltete Builds auf gleichen Branch
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # WICHTIG: gradlew auf Linux ausführbar machen
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Set up JDK 17 (Temurin) with Gradle cache
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Run tests
+        run: ./gradlew test --no-daemon
+
+  build-and-push:
+    name: Build & Push Docker Image
+    # nur auf main (nicht in PRs)
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+
